@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BeomMapper">
+	<select id="natural" resultType="map">
+		with arr as (
+		select
+		unnest(CDB_JenksBins(array_agg(totalusage),5,0,TRUE)) as from_val,
+		unnest(CDB_JenksBins(array_agg(totalusage),5)) as to_val
+		from d3bjdview
+		)
+
+		select from_val, to_val
+		from arr
+	</select>
+
+	<select id="deung" resultType="map">
+		select bucket,min_val+((max_val-min_val)/5)*(bucket-1)as from_val,
+		min_val+((max_val-min_val)/5)*bucket as to_val
+		from (
+		select width_bucket(totalusage,min_val, max_val,4) as bucket
+		from d3bjdview, (select min(totalusage) as min_val, max(totalusage) as
+		max_val
+		from d3bjdview
+		) stats
+		GROUP BY bucket
+		order by bucket
+		) bucket_tl,(select min(totalusage) as min_val, max(totalusage) as
+		max_val
+		from d3bjdview
+		) stats
+	</select>
+</mapper>

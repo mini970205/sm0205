@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SggMapper">
+	<select id="selectSgg" parameterType="String"
+		resultType="selectSgg">
+		SELECT sgg_nm, sgg_cd FROM tl_sgg WHERE sd_nm = #{name}
+	</select>
+
+	<select id="selectGeom" parameterType="String" resultType="Map">
+		select (select ST_XMax(geom) as xmax FROM tl_sd WHERE sd_nm =
+		#{name}::varchar order by xmax desc limit 1)
+		,(select ST_YMax(geom) as ymax FROM tl_sd WHERE sd_nm = #{name}::varchar order
+		by ymax desc limit 1)
+		,(select ST_XMin(geom) as xmin FROM tl_sd WHERE sd_nm = #{name}::varchar order
+		by xmin limit 1)
+		,(select ST_YMin(geom) as ymin FROM tl_sd WHERE sd_nm = #{name}::varchar order
+		by ymin limit 1)
+		from tl_sd limit 1
+	</select>
+	
+	<select id="selectB" parameterType="String" resultType="Map">
+    select (select ST_XMax(geom) as xmax FROM tl_sgg WHERE sgg_nm = #{name}::varchar order by xmax desc limit 1)
+      ,(select ST_YMax(geom) as ymax FROM tl_sgg WHERE sgg_nm = #{name}::varchar order by ymax desc limit 1)
+      ,(select ST_XMin(geom) as xmin FROM tl_sgg WHERE sgg_nm = #{name}::varchar order by xmin  limit 1)
+      ,(select ST_YMin(geom) as ymin FROM tl_sgg WHERE sgg_nm = #{name}::varchar order by ymin limit 1)
+          from tl_sd limit 1
+   </select>
+	
+</mapper>
