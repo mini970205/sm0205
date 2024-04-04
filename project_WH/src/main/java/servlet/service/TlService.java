@@ -23,4 +23,8 @@ public interface TlService {
 	
 	List<Map<String, Object>> deung();
 
+	List<Map<String, Object>> sdChart();
+
+	List<Map<String, Object>> getChart(String sdcd);
+
 }

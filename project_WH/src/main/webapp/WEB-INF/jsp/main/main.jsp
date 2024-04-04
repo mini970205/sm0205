@@ -36,21 +36,21 @@
       
       result.forEach(function(i){
          let arr = new Array();
-         arr.push(i.nm);
+         arr.push(i.sgg_nm);
          arr.push(i.amount);
          rows.push(arr);
       })
       
       var data = new google.visualization.DataTable();
       data.addColumn('string');
-        data.addColumn('number', '전기');
-        data.addRows(rows);
+      data.addColumn('number', '전기');
+      data.addRows(rows);
 
-   var options = {
+      var options = {
          legend: {
               position: 'none'
-            },
-        bars: 'horizontal', // Required for Material Bar Charts.
+         },
+         bars: 'horizontal', 
       };
 
       var chart = new google.charts.Bar(document.getElementById('bar'));
@@ -146,7 +146,7 @@
     	            $("#sgg").empty();
     	            var sgg = "<option>시군구 선택</option>";               
     	            for (var i = 0; i < list.length; i++) {
-    	                sgg += "<option value='" + list[i].sgg_cd + "'>"
+    	                sgg += "<option value='" + list[i].adm_sect_c + "'>"
     	                     + list[i].sgg_nm + "</option>"
     	            } 
 
@@ -201,7 +201,7 @@
                   
                   map.getView().fit([result.xmin, result.ymin, result.xmax, result.ymax], {duration : 900});                  
                
-                  var sgg_CQL = "sgg_cd=" + $("#sgg").val();
+                  var sgg_CQL = "adm_sect_c=" + $("#sgg").val();
                   map.removeLayer(sgg);
                   var sggSource = new ol.source.TileWMS({
                      url : 'http://localhost:8080/geoserver/cite/wms?service=WMS',
@@ -358,8 +358,8 @@
        });
       $("#charttbtn").on("click",function(){
 
-          let sdChartcd = $("#sdChartSelect option:checked").val();
-          
+          var sdChartcd = $("#sdChartSelect option:checked").val();
+          alert(sdChartcd);
           $.ajax({
              url:'/chart.do',
              type:'post',
@@ -611,15 +611,7 @@ tbody > tr > td > img {
    
                      <button id="insertbtn" class="insertbtn">입력하기</button>
                      
-                     <div>
-	                     <table>
-		                  	<tr>
-			                  	<td>범례</td>		                  	
-		                  	</tr>
-		                  	<tbody></tbody>
-	                     
-	                     </table>                     
-                     </div>
+                
                   </div>
                   <div id="uploaddiv">
                      <form id="uploadForm">

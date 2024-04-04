@@ -68,11 +68,19 @@ public class RestFullController {
 	}
 	
 	@PostMapping("/chart.do")
-	public Map<String, Object> chart(@RequestParam("sdcd") String sdcd) {
-		Map<String, Object> response = new HashMap<>();
-		response.put("chartData", sdcd);
-		return response;
-	}
+	public List<Map<String,Object>> getChart(@RequestParam("sdcd") String sdcd){
+		
+	    List<Map<String,Object>> list = new ArrayList<>();
+	    if(sdcd.equals("0")) {
+	         list = tlService.sdChart();
+	      }else {	         
+	         list = tlService.getChart(sdcd);         
+	      }
+	   
+	      return list;
+	   }
+
+
 	
 	
 

@@ -3,7 +3,11 @@
 <mapper namespace="SggMapper">
 	<select id="selectSgg" parameterType="String"
 		resultType="selectSgg">
-		SELECT sgg_nm, sgg_cd FROM tl_sgg WHERE sd_nm = #{name}
+		select sgg_nm, 
+case when char_length(adm_sect_c) = 4 then adm_sect_c || '0'
+else adm_sect_c
+end 
+from tl_sgg WHERE sd_nm = #{name}
 	</select>
 
 	<select id="selectGeom" parameterType="String" resultType="Map">
