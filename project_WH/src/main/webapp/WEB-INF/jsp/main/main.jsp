@@ -6,10 +6,10 @@
 <html>
 <head>
 <title>지도</title>
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script
    src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/ol@v9.0.0/dist/ol.js"></script>
 <link rel="stylesheet"
    href="https://cdn.jsdelivr.net/npm/ol@v9.0.0/ol.css">
@@ -22,8 +22,6 @@
    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
    crossorigin="anonymous"></script>
-
-   
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
    google.charts.load("current", {packages:['bar']});
@@ -109,7 +107,7 @@
          $("#chartdiv").show();
       })
       
-      var sd, sgg, bjd,legendDiv;
+      var sd, sgg, bjd, legendDiv;
       
       let Base = new ol.layer.Tile(
             {
@@ -151,12 +149,14 @@
     	            } 
 
     	            $("#sgg").append(sgg);
+    	            $("#legend").remove();
     	            
     	            map.getView().fit([geom[0].xmin, geom[0].ymin, geom[0].xmax, geom[0].ymax],{
     	                duration:900
     	            });
       
     	            map.removeLayer(sd);
+    	            
      
     	            var sd_CQL1 = "sd_cd=" + $("#sdselect").val();
     	            
@@ -186,6 +186,8 @@
     	            alert("실패");
     	        }
     	    })
+    	    map.removeLayer(sgg);
+    	    map.removeLayer(bjd);
     	});
       
       $("#sgg").on("change", function() {
@@ -221,6 +223,7 @@
                      opacity : 0.5
                   });
                   map.addLayer(sgg);
+                  $("#legend").remove();
                   $("#legendSelect").val("default");
                   legendSelected = false;
               },
@@ -228,6 +231,7 @@
                  alert("실패");
               }
            });
+    	  map.removeLayer(bjd);
         });
       
 
@@ -244,6 +248,7 @@
     	    map.removeLayer(sd);
     	    map.removeLayer(sgg);
     	    map.removeLayer(bjd);
+    	    
     	    
     	    let style = (legend === "1") ? 'deung' : 'natural'; // 변경된 스타일 이름으로 수정
 
@@ -326,7 +331,7 @@
     	        }
     	    });
     	});
-      $("#transmit").on("click", function() {
+      $("#transdb").on("click", function() {
           var test = $("#txtfile").val().split(".").pop();
 
          var formData = new FormData();
@@ -353,9 +358,9 @@
                 $('#uploadtext').text("업로드 완료");
                 setTimeout(timeout,5000);
              } 
-          });
+          })
              
-       });
+       })
       $("#charttbtn").on("click",function(){
 
           var sdChartcd = $("#sdChartSelect option:checked").val();
@@ -375,9 +380,14 @@
 
           
        });
+      $(document).on("click", "#closeChart", function() {
+          $('#bardiv').hide();
+      });
       
 
     });
+    
+    
     var timeout = function(){
       $('#mask').remove();
       $('#loading').remove();
@@ -457,123 +467,156 @@
       }
 </style>
 <style type="text/css">
+html {
+height: 100%;
+margin: 0;
+padding: 0;
+}
+
 body {
-   margin: 0px;
-   padding: 0px;
-   width: 100vw;
-   height: 100vh;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #8FBC8F;
+    font-family: Arial, sans-serif;
 }
 
 .container {
-   margin: 0 auto;
-   width: 100%;
-   height: 100%;
-   display: flex;
-   justify-content: center;
-   align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
 }
 
 .main {
-   width: 80%;
-   height: 80%;
-   display: flex;
-   border-top: 1px solid #BDBDBD;
-   border-left: 1px solid #BDBDBD;
+    width: 100%;
+    height: 80%;
+    display: flex;
+    border: 1px solid #BDBDBD;
 }
 
 .btncon {
-   width: 30%;
+    width: 30%;
 }
 
 .map {
-   width: 70%;
-   position: relative;
+    width: 80%;
+    position: relative;
 }
 
 .footer {
-   height: 10%;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   border-bottom: 1px solid #BDBDBD;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #BDBDBD;
+    background-color: #000000;
+    color: #fff;
+    text-align: center;
 }
 
 .menu {
-   height: 90%;
-   display: flex;
+    height: 90%;
+    display: flex;
+    background-color: #fff;
 }
 
 .menubar {
-   width: 30%;
-   display: inline-block;
-   border-right: 1px solid #BDBDBD;
+    width: 40%;
+    border-right: 1px solid #BDBDBD;
 }
 
-.menubar > button{
-   padding: 8px 4px;
-   text-align:center;    
-   border-left: none;
-    border-right: none;
+.menubar > button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.list-group-item:first-child{
-   border-top-left-radius:unset;
-   border-top-right-radius:unset;
+.menubar > button:hover {
+    background-color: #f0f0f0;
+    color: #000;
 }
-
-
 
 .func {
-   padding:10px;
-   width: 70%;
-   text-align: center;
-}
-.func > select{
-   width:100%;
-   height: 25px;
-   margin-bottom: 10px;
-   font-weight: bold;
-   color:#585858;
-}
-.main > div {
-   border-right: 1px solid #BDBDBD;
-   border-bottom: 1px solid #BDBDBD;
+    padding: 10px;
+    width: 70%;
+    text-align: center;
 }
 
-.insertbtn{
-   width:100%;
+.func > select {
+    width: 100%;
+    height: 35px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #585858;
+    border: 1px solid #BDBDBD;
+    border-radius: 5px;
 }
 
-table, th, td {
-  border: 1px solid #E6E6E6;
-  border-collapse: collapse;
-  
+.insertbtn {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
 }
 
-tbody > tr > td:nth-child(2) {
-   padding:5px;
+.insertbtn:hover {
+    background-color: #0056b3;
 }
-tbody > tr > td:nth-child(1) {
-   padding:0px;
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #E6E6E6;
+    padding: 8px;
+    text-align: center;
 }
 
 tbody > tr > td > img {
-   width: 32px;
-   height:32px;
+    width: 32px;
+    height: 32px;
 }
 
-#selectdiv > select {
-   width:100%;
-   margin-bottom: 8px;
+#selectdiv > select,
+#sdChartSelect {
+    width: 100%;
+    height: 35px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #585858;
+    border: 1px solid #BDBDBD;
+    border-radius: 5px;
 }
 
-#sdChartSelect{
-   width:100%;
-   margin-bottom: 10px;
+#transdb,
+#charttbtn {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    
 }
 
-#transdb, #charttbtn{
-   width:100%;
+#transdb:hover,
+#charttbtn:hover {
+    background-color: #0056b3;
 }
 </style>
 
@@ -637,6 +680,7 @@ tbody > tr > td > img {
          </div>
          <div class="map" id="map">
             <div id="bardiv" style="z-index:100;position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);background-color:rgba(253, 255, 255, 0.5);width:97%;height:97%;display:none;">
+               <button id="closeChart" style="background-color: #007bff; color: #fff; position: absolute; bottom: 10px; right: 10px;">닫기</button>
                <div id="bar" style="width: 80%; height: 50%;opacity:none;margin: 0 auto; padding-top:10px"></div>
             
             </div>
